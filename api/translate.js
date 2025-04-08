@@ -1,28 +1,18 @@
-import express from 'express';
 import axios from 'axios';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-// Helper to get __dirname in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const app = express();
-const port = process.env.PORT || 3000; // Use Render's port or 3000 locally
 
 // --- IMPORTANT: API Key is read from environment variables ---
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 
-// Middleware to parse JSON request bodies
-app.use(express.json());
-
-// Serve static files (HTML, CSS, JS) from the current directory
-app.use(express.static(path.join(__dirname)));
-
-// API endpoint for translation
-app.post('/api/translate', async (req, res) => {
+export default async function handler(req, res) {
+    // Vercel automatically parses the body for POST requests if Content-Type is application/json
     const { jargon, style } = req.body;
+
+    // Only allow POST requests
+    if (req.method !== 'POST') {
+        res.setHeader('Allow', ['POST']);
+        return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
+    }
 
     if (!jargon || !style) {
         return res.status(400).json({ error: 'Missing jargon or style in request body.' });
@@ -30,7 +20,8 @@ app.post('/api/translate', async (req, res) => {
 
     if (!OPENAI_API_KEY) {
         console.error('OpenAI API key is not set in environment variables.');
-        return res.status(500).json({ error: 'Server configuration error: API key missing.' });
+        // Avoid exposing detailed server errors to the client
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 
     const prompt = `Translate the following consultancy jargon into the style of "${style}". Jargon: "${jargon}"`;
@@ -52,7 +43,8 @@ app.post('/api/translate', async (req, res) => {
         });
 
         if (response.data && response.data.choices && response.data.choices.length > 0 && response.data.choices[0].message) {
-            res.json({ translation: response.data.choices[0].message.content.trim() });
+            // Send the successful translation back
+            res.status(200).json({ translation: response.data.choices[0].message.content.trim() });
         } else {
             console.error('Invalid response format from OpenAI API:', response.data);
             res.status(500).json({ error: 'Invalid response format from translation API.' });
@@ -62,16 +54,7 @@ app.post('/api/translate', async (req, res) => {
         console.error('Error calling OpenAI API:', error.response ? error.response.data : error.message);
         const statusCode = error.response ? error.response.status : 500;
         const errorMessage = error.response?.data?.error?.message || 'Failed to fetch translation from API.';
+        // Send a generic error message or the specific API error if desired
         res.status(statusCode).json({ error: `API Error: ${errorMessage}` });
     }
-});
-
-// Fallback to serve index.html for any other GET request (useful for single-page apps)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-
-app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
-});
+}
