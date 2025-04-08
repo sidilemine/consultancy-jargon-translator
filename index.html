@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultancy Jargon Translator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Consultancy Jargon Translator</h1>
+
+        <label for="jargon-input">Enter Consultancy Jargon:</label>
+        <textarea id="jargon-input" rows="6" placeholder="e.g., 'Let's boil the ocean to synergize our core competencies...'"></textarea>
+
+        <label for="translation-style">Translate to:</label>
+        <select id="translation-style">
+            <option value="Simple English">Simple English</option>
+            <option value="Explain to a 5-Year-Old">Explain to a 5-Year-Old</option>
+            <option value="Fun and Engaging">Fun and Engaging</option>
+            <option value="Metaphoric">Metaphoric</option>
+            <option value="Formal/Professional">Formal/Professional</option>
+            <option value="Sarcastic">Sarcastic</option>
+            <option value="Like a Pirate">Like a Pirate</option>
+            <option value="Explain the Core Concept">Explain the Core Concept</option>
+            <option value="Key Bullet Points">Key Bullet Points</option>
+        </select>
+
+        <button id="translate-button">Translate</button>
+
+        <div class="output-container">
+            <h2>Translation:</h2>
+            <div id="translation-output" class="output-box">
+                Your translation will appear here...
+            </div>
+            <div id="error-message" class="error-message"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
