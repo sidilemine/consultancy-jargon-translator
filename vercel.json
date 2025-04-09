@@ -4,20 +4,12 @@
     {
       "src": "api/translate.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "." }
     }
   ],
   "routes": [
     {
       "src": "/api/translate",
       "dest": "/api/translate.js"
-    },
-    {
-      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
