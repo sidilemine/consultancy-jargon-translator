@@ -5,6 +5,8 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 
 export default async function handler(req, res) {
+    console.log("API Function Started"); // Add entry log
+
     // Vercel automatically parses the body for POST requests if Content-Type is application/json
     const { jargon, style } = req.body;
 
