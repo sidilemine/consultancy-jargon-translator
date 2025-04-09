@@ -1,76 +1,174 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 body {
-    font-family: sans-serif;
+    font-family: 'Roboto', sans-serif; /* Use Roboto */
     line-height: 1.6;
-    margin: 20px;
-    background-color: #f4f4f4;
+    margin: 0; /* Remove default margin */
+    background-color: #f0f2f5; /* Lighter grey background */
+    /* Placeholder background - replace URL if desired */
+    background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Keep background fixed during scroll */
     color: #333;
+    min-height: 100vh; /* Ensure body takes full viewport height */
+    display: flex; /* Use flexbox to center container */
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Add padding for smaller screens */
+    box-sizing: border-box;
 }
 
 .container {
     max-width: 700px;
-    margin: auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Ensure container takes available width */
+    background: rgba(255, 255, 255, 0.92); /* Slightly less transparent white background */
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+    backdrop-filter: blur(6px); /* Slightly more blur effect */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
 }
 
 h1, h2 {
-    color: #555;
+    color: #2c3e50; /* Darker blue-grey */
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+
+h2 {
+    margin-top: 30px;
+    border-top: 1px solid #dfe6e9; /* Lighter border */
+    padding-top: 25px;
+    color: #34495e; /* Slightly lighter blue-grey */
 }
 
 label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-weight: bold;
+    color: #555;
 }
 
-textarea, select, button {
+textarea, select {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #bdc3c7; /* Grey border */
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 15px;
+    background-color: #fff;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.06); /* Subtle inset shadow */
 }
 
 textarea {
-    resize: vertical; /* Allow vertical resizing */
-    min-height: 100px;
+    resize: vertical;
+    min-height: 120px;
 }
 
-button {
-    background-color: #007bff;
+/* Styles for the main Translate button */
+button.main-button {
+    background-color: #3498db; /* Brighter blue */
     color: white;
     border: none;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 6px;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    margin-top: 10px; /* Add some space above */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-button:hover {
-    background-color: #0056b3;
+button.main-button:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+    transform: translateY(-1px); /* Slight lift effect */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
+
+button.main-button:active {
+    transform: translateY(0px); /* Button press effect */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Styles for the new Generate button header */
+.input-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px; /* Align with label margin */
+}
+
+.input-header label {
+    margin-bottom: 0; /* Remove bottom margin from label inside header */
+}
+
+.input-header span {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Styles for the inline Generate button */
+button.inline-button {
+    background-color: #e74c3c; /* Reddish color */
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    vertical-align: middle; /* Align better with text */
+}
+
+button.inline-button:hover {
+    background-color: #c0392b; /* Darker red */
+    transform: scale(1.05); /* Slight scale effect */
+}
+
+button.inline-button:active {
+    transform: scale(1);
+}
+
+/* Style for disabled buttons */
+button:disabled {
+    background-color: #bdc3c7 !important; /* Grey, use important to override */
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
 
 .output-container {
-    margin-top: 20px;
-    border-top: 1px solid #eee;
-    padding-top: 20px;
+    margin-top: 30px; /* Increased margin */
 }
 
 .output-box {
-    background-color: #e9ecef;
-    padding: 15px;
-    border-radius: 4px;
-    min-height: 50px;
-    white-space: pre-wrap; /* Preserve whitespace and line breaks */
-    word-wrap: break-word; /* Break long words */
+    background-color: #ecf0f1; /* Lighter grey */
+    padding: 15px 20px;
+    border-radius: 6px;
+    min-height: 60px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border: 1px solid #dfe6e9; /* Lighter border */
+    font-size: 15px;
+    line-height: 1.7; /* Improve readability */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
 }
 
 .error-message {
-    color: #dc3545;
-    margin-top: 10px;
+    color: #c0392b; /* Match generate button hover */
+    margin-top: 15px;
     font-weight: bold;
+    text-align: center;
+    padding: 8px;
+    background-color: rgba(231, 76, 60, 0.1); /* Light red background */
+    border-radius: 4px;
 }

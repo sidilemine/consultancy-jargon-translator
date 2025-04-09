@@ -5,10 +5,10 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 
 export default async function handler(req, res) {
-    console.log("API Function Started"); // Add entry log
+    console.log("API Function Started");
 
     // Vercel automatically parses the body for POST requests if Content-Type is application/json
-    const { jargon, style } = req.body;
+    const { jargon, style, explainBullets } = req.body; // Get explainBullets flag
 
     // Only allow POST requests
     if (req.method !== 'POST') {
@@ -26,7 +26,14 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 
-    const prompt = `Translate the following consultancy jargon into the style of "${style}". Jargon: "${jargon}"`;
+    // Construct the prompt based on the style and explainBullets flag
+    let prompt;
+    if (explainBullets && style === 'Key Bullet Points') {
+        prompt = `Translate the following consultancy jargon into key bullet points. After the bullet points, add a section titled "Explanation:" where you explain what each bullet point means in simple, clear English.\n\nJargon: "${jargon}"`;
+    } else {
+        prompt = `Translate the following consultancy jargon into the style of "${style}". Jargon: "${jargon}"`;
+    }
+    console.log("Using prompt:", prompt); // Log the prompt being used
 
     try {
         const response = await axios.post(OPENAI_API_URL, {
@@ -36,7 +43,8 @@ export default async function handler(req, res) {
                 { role: "user", content: prompt }
             ],
             temperature: 0.7,
-            max_tokens: 150
+            // Increase max_tokens slightly for bullet points + explanation
+            max_tokens: (explainBullets && style === 'Key Bullet Points') ? 250 : 150
         }, {
             headers: {
                 'Content-Type': 'application/json',

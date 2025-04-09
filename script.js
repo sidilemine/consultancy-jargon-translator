@@ -2,15 +2,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const jargonInput = document.getElementById('jargon-input');
     const translationStyleSelect = document.getElementById('translation-style');
     const translateButton = document.getElementById('translate-button');
+    const generateButton = document.getElementById('generate-button'); // Get generate button
     const translationOutput = document.getElementById('translation-output');
     const errorMessageDiv = document.getElementById('error-message');
 
-    // The backend server will handle the API key securely.
+    // Backend endpoints
     const API_TRANSLATE_ENDPOINT = '/api/translate';
+    const API_GENERATE_ENDPOINT = '/api/generate'; // New endpoint for generation
 
+    // --- Generate Button Listener ---
+    generateButton.addEventListener('click', async () => {
+        errorMessageDiv.textContent = '';
+        jargonInput.value = 'Generating...'; // Indicate loading
+        generateButton.disabled = true; // Disable button during generation
+        translateButton.disabled = true;
+
+        try {
+            const response = await fetch(API_GENERATE_ENDPOINT, { method: 'POST' }); // Call generate endpoint
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || `Request failed with status ${response.status}`);
+            }
+
+            if (data.jargon) {
+                jargonInput.value = data.jargon; // Populate textarea
+            } else {
+                throw new Error('Invalid response format from generation API.');
+            }
+        } catch (error) {
+            console.error('Generation Error:', error);
+            errorMessageDiv.textContent = `Generation Error: ${error.message}`;
+            jargonInput.value = ''; // Clear textarea on error
+        } finally {
+             generateButton.disabled = false; // Re-enable buttons
+             translateButton.disabled = false;
+        }
+    });
+
+    // --- Translate Button Listener ---
     translateButton.addEventListener('click', async () => {
-        const jargon = jargonInput.value.trim();
-        const style = translationStyleSelect.value;
+        let jargon = jargonInput.value.trim();
+        let style = translationStyleSelect.value;
         errorMessageDiv.textContent = ''; // Clear previous errors
         translationOutput.textContent = 'Translating...'; // Loading indicator
 
@@ -29,7 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ jargon, style }) // Send jargon and style to backend
+                // Add a flag if the special bullet point style is selected
+                body: JSON.stringify({
+                    jargon,
+                    style,
+                    explainBullets: style === 'Key Bullet Points'
+                })
             });
 
             const data = await response.json(); // Always parse JSON, even for errors

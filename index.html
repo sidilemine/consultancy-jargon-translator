@@ -10,23 +10,22 @@
     <div class="container">
         <h1>Consultancy Jargon Translator</h1>
 
-        <label for="jargon-input">Enter Consultancy Jargon:</label>
-        <textarea id="jargon-input" rows="6" placeholder="e.g., 'Let's boil the ocean to synergize our core competencies...'"></textarea>
+        <div class="input-header">
+            <label for="jargon-input">Enter Consultancy Jargon:</label>
+            <span>or <button id="generate-button" class="inline-button">GENERATE</button></span>
+        </div>
+        <textarea id="jargon-input" rows="6" placeholder="e.g., 'Let's boil the ocean to synergize our core competencies...' or click GENERATE"></textarea>
 
         <label for="translation-style">Translate to:</label>
         <select id="translation-style">
             <option value="Simple English">Simple English</option>
-            <option value="Explain to a 5-Year-Old">Explain to a 5-Year-Old</option>
             <option value="Fun and Engaging">Fun and Engaging</option>
             <option value="Metaphoric">Metaphoric</option>
-            <option value="Formal/Professional">Formal/Professional</option>
             <option value="Sarcastic">Sarcastic</option>
-            <option value="Like a Pirate">Like a Pirate</option>
-            <option value="Explain the Core Concept">Explain the Core Concept</option>
-            <option value="Key Bullet Points">Key Bullet Points</option>
+            <option value="Key Bullet Points">Key Bullet Points (with explanation)</option>
         </select>
 
-        <button id="translate-button">Translate</button>
+        <button id="translate-button" class="main-button">Translate</button>
 
         <div class="output-container">
             <h2>Translation:</h2>
